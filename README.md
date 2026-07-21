@@ -2,13 +2,11 @@
 
 > A browser-native rigid body physics engine built entirely from scratch in modern C++, compiled to WebAssembly, and rendered in real time using Three.js.
 
-<p align="center">
-  <img src="docs/demo.gif" width="900" alt="Axiom Demo">
-</p>
+---
 
-<p align="center">
-  <strong>Live Demo:</strong> Coming Soon
-</p>
+# Demo
+
+https://github.com/user-attachments/assets/5f8750bb-fcdf-4aa8-b727-ad7ca2cfa523
 
 ---
 

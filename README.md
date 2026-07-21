@@ -2,145 +2,201 @@
 
 > A browser-native rigid body physics engine built entirely from scratch in modern C++, compiled to WebAssembly, and rendered in real time using Three.js.
 
-![C++](https://img.shields.io/badge/C%2B%2B-17-blue)
-![WebAssembly](https://img.shields.io/badge/WebAssembly-WASM-654FF0)
-![Emscripten](https://img.shields.io/badge/Emscripten-Compiled-black)
-![Three.js](https://img.shields.io/badge/Three.js-Rendering-black)
-![License](https://img.shields.io/badge/License-MIT-green)
+<p align="center">
+  <img src="docs/demo.gif" width="900" alt="Axiom Demo">
+</p>
+
+<p align="center">
+  <strong>Live Demo:</strong> Coming Soon
+</p>
 
 ---
 
-## Overview
+# Overview
 
-Axiom is a browser-native rigid body physics engine implemented entirely in modern C++ and executed through WebAssembly. The project explores the architecture and implementation of real-time physics engines by constructing their core mathematical and physical systems from first principles rather than integrating existing engine libraries.
+Axiom is a browser-native rigid body physics engine written entirely in modern C++. The project explores the architecture of real-time physics engines by implementing every major subsystem from first principles rather than relying on existing mathematics or physics libraries.
 
-Unlike projects that rely on third-party mathematics or physics frameworks, every core simulation component in Axiom is implemented from scratch. This includes vector mathematics, physics primitives, numerical integration, collision detection, collision response, and simulation management.
+The engine is compiled to WebAssembly using Emscripten and executed directly inside the browser. JavaScript serves only as the interface between the simulation and the rendering pipeline, while all numerical computations—including integration, collision detection, and collision response—remain inside native C++.
 
-Three.js is used exclusively for visualization, while Emscripten compiles the native C++ engine into WebAssembly, enabling high-performance physics simulation directly inside the browser.
-
----
-
-## Objectives
-
-The primary goals of Axiom are to:
-
-- Design a modular rigid body physics engine
-- Implement fundamental mathematical and physical systems from first principles
-- Execute native C++ simulation in the browser using WebAssembly
-- Maintain a clear separation between the simulation engine and the rendering layer
-- Explore modern engine architecture through original implementations rather than external physics libraries
+The objective of Axiom is not only to simulate rigid bodies, but also to understand and recreate the engineering principles that underpin modern real-time physics engines.
 
 ---
 
-## Features
+# Motivation
 
-### Mathematics
+Modern physics engines such as Bullet, PhysX, and Box2D provide highly optimized implementations of rigid body simulation but abstract away much of the mathematics and architecture behind them.
+
+Axiom was developed to explore these systems directly by implementing the engine from first principles. Every major subsystem—including vector mathematics, rigid body dynamics, numerical integration, collision detection, collision response, and simulation management—was designed specifically for this project.
+
+The project also investigates how WebAssembly enables modern C++ systems programming to execute efficiently inside web browsers while maintaining a clear separation between simulation and rendering.
+
+---
+
+# Features
+
+## Mathematics
 
 - Custom Vector3 implementation
-- Vector arithmetic using operator overloading
+- Operator overloading
 - Dot product
 - Cross product
 - Magnitude and normalization
 - Distance calculations
 
-### Physics Engine
+## Physics Engine
 
 - Particle simulation
 - Rigid body simulation
 - Physics world management
 - Fixed timestep simulation
-- Euler integration
+- Semi-Implicit Euler integration
 - Gravity simulation
 - Velocity integration
 
-### Collision System
+## Collision System
 
 - Sphere–sphere collision detection
 - Contact generation
 - Impulse-based collision resolution
-- Position correction
+- Positional correction
 - Floor collision handling
 - World boundary constraints
 
-### Browser Integration
+## Browser Integration
 
 - Native C++ compiled to WebAssembly
 - JavaScript bindings using Embind
-- Real-time synchronization between the simulation and rendering pipelines
-- Interactive visualization using Three.js
+- Real-time synchronization between simulation and rendering
+- Three.js visualization
+
+Unlike conventional browser physics simulations, every numerical computation is executed inside the native C++ engine. JavaScript is responsible only for interacting with the WebAssembly module and rendering object transforms through Three.js.
 
 ---
 
-## Architecture
+# Architecture
 
 ```text
-                             Browser
-
-                    Three.js Rendering Layer
-                                │
-                                ▼
-                    JavaScript Interface (ES6)
-                                │
-                                ▼
-                  Embind JavaScript Bindings
-                                │
-                                ▼
-               WebAssembly Module (Compiled C++)
-                                │
-                                ▼
+                              Browser
+                                  │
+                                  ▼
+                      Three.js Rendering Layer
+                                  │
+                                  ▼
+                      JavaScript Interface (ES6)
+                                  │
+                                  ▼
+                       Embind JavaScript Bindings
+                                  │
+                                  ▼
+                 WebAssembly Runtime (Compiled C++)
+                                  │
+                                  ▼
 ┌──────────────────────────────────────────────────────────────┐
 │                          AXIOM ENGINE                        │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │  Mathematics                                                 │
-│  • Vector3                                                   │
+│   • Vector3                                                  │
 │                                                              │
-│  Physics                                                     │
-│  • Particle                                                  │
-│  • RigidBody                                                 │
-│  • PhysicsWorld                                              │
+│  Dynamics                                                    │
+│   • Particle                                                 │
+│   • RigidBody                                                │
+│   • PhysicsWorld                                             │
 │                                                              │
 │  Simulation                                                  │
-│  • Euler Integration                                         │
-│  • Gravity                                                   │
+│   • Semi-Implicit Euler Integration                          │
+│   • Gravity                                                  │
 │                                                              │
 │  Collision                                                   │
-│  • Sphere–Sphere Detection                                   │
-│  • Impulse Resolution                                        │
-│  • Position Correction                                       │
+│   • Sphere–Sphere Detection                                  │
+│   • Impulse Resolution                                       │
+│   • Positional Correction                                    │
 │                                                              │
 └──────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-                          Modern C++17
+                                  │
+                                  ▼
+                             Modern C++17
 ```
 
 ---
 
-## Project Structure
+# Engineering Challenges
+
+Developing Axiom required solving several problems commonly abstracted away by mature physics engines.
+
+- Designing a reusable vector mathematics library.
+- Maintaining numerical stability during real-time simulation.
+- Resolving rigid body collisions using impulse-based dynamics.
+- Preventing persistent interpenetration through positional correction.
+- Exposing native C++ classes to JavaScript through Embind.
+- Synchronizing a WebAssembly simulation with a Three.js rendering pipeline.
+
+These challenges shaped the modular architecture of the engine and motivated a clear separation between simulation, browser interoperability, and visualization.
+
+---
+
+# Physics Implementation
+
+## Numerical Integration
+
+Motion is integrated using **Semi-Implicit Euler Integration**, a stable numerical integration technique widely used in real-time physics engines.
+
+```text
+velocity += acceleration × Δt
+
+position += velocity × Δt
+```
+
+Updating velocity before position improves numerical stability compared to explicit Euler integration while remaining computationally inexpensive.
+
+---
+
+## Collision Detection
+
+Sphere collisions are detected by comparing the distance between object centers with the sum of their radii.
+
+```text
+||p₂ − p₁|| < r₁ + r₂
+```
+
+The collision normal is computed from the normalized vector between object centers and is used during impulse resolution.
+
+---
+
+## Collision Resolution
+
+Rigid body collisions are resolved using an impulse-based solver.
+
+The impulse magnitude depends on
+
+- Relative velocity
+- Collision normal
+- Mass
+- Coefficient of restitution
+
+The computed impulse is applied to both bodies, conserving linear momentum while producing elastic or inelastic collisions depending on restitution.
+
+---
+
+## Positional Correction
+
+Because collisions are evaluated at discrete timesteps, small overlaps may remain after collision resolution.
+
+Axiom applies positional correction immediately after impulse resolution to separate intersecting bodies and improve long-term simulation stability.
+
+---
+
+# Project Structure
 
 ```text
 Axiom
 │
 ├── engine
-│   ├── include
-│   │   ├── Vector3.h
-│   │   ├── Particle.h
-│   │   ├── RigidBody.h
-│   │   ├── PhysicsWorld.h
-│   │   ├── Collision.h
-│   │   └── ...
-│   │
-│   ├── src
-│   │   ├── Vector3.cpp
-│   │   ├── Particle.cpp
-│   │   ├── RigidBody.cpp
-│   │   ├── PhysicsWorld.cpp
-│   │   ├── Collision.cpp
-│   │   └── ...
-│   │
+│   ├── math
+│   ├── dynamics
+│   ├── collision
+│   ├── world
 │   └── bindings
-│       └── bindings.cpp
 │
 ├── web
 │   ├── index.html
@@ -148,67 +204,44 @@ Axiom
 │   ├── scene.js
 │   └── style.css
 │
+├── docs
+│   ├── demo.gif
+│   ├── physics.md
+│   ├── architecture.md
+│   └── images
+│
 ├── CMakeLists.txt
 ├── package.json
-├── package-lock.json
 ├── README.md
 └── LICENSE
 ```
 
 ---
 
-## Technology Stack
+# Technology Stack
 
 | Category | Technology |
-|----------|------------|
+|-----------|------------|
 | Language | C++17 |
-| Rendering | Three.js |
 | Browser Runtime | WebAssembly |
 | Toolchain | Emscripten |
-| Build System | CMake |
 | JavaScript Bindings | Embind |
-
----
-
-## Design Philosophy
-
-Axiom follows a first-principles approach to engine development.
-
-Every subsystem responsible for physics simulation was implemented specifically for this project instead of relying on existing mathematics or physics libraries.
-
-Custom implementations include:
-
-- Vector mathematics
-- Physics primitives
-- Simulation pipeline
-- Numerical integration
-- Collision detection
-- Collision response
-- Physics world management
-
-External dependencies are intentionally limited to browser interoperability and visualization.
-
-| Component | Implementation |
-|----------|----------------|
-| Mathematics | Custom |
-| Physics Engine | Custom |
-| Collision Detection | Custom |
-| Collision Resolution | Custom |
 | Rendering | Three.js |
-| Browser Compilation | Emscripten |
+| Build System | CMake |
+| Development | Vite |
 
 ---
 
-## Building
+# Building
 
-### Clone the repository
+## Clone
 
 ```bash
 git clone https://github.com/<your-username>/Axiom.git
 cd Axiom
 ```
 
-### Configure
+## Configure
 
 ```bash
 mkdir build
@@ -217,13 +250,13 @@ cd build
 emcmake cmake ..
 ```
 
-### Build
+## Build
 
 ```bash
 emmake make
 ```
 
-### Run
+## Run
 
 ```bash
 cd ../web
@@ -235,27 +268,52 @@ Open the local development server in your browser.
 
 ---
 
-## Future Development
+# Documentation
 
-The current implementation establishes the foundation for a complete real-time physics engine.
+Additional implementation details are available in the `docs` directory.
 
-Future work includes:
+- **physics.md** — Mathematical foundations and simulation algorithms
+- **architecture.md** — Engine architecture and subsystem design
 
+---
+
+# Roadmap
+
+## Version 1.1
+
+- Force generators
+- Springs
+- Additional collider primitives
+
+## Version 2.0
+
+- Rotational dynamics
+- Angular momentum
+- Inertia tensors
+- Quaternion mathematics
+
+## Version 3.0
+
+- SAT collision detection
 - Broad-phase collision detection
 - Spatial partitioning
-- Additional collider primitives
-- Rotational dynamics
-- Quaternion mathematics
 - Constraint solver
-- Joint system
-- Friction and restitution improvements
-- Continuous collision detection
 - Performance optimization
 - Multithreaded simulation
 
 ---
 
-## License
+# Closing Remarks
+
+Axiom represents an exploration of real-time physics engine architecture through original implementation rather than library integration.
+
+The project demonstrates how modern C++, WebAssembly, and browser technologies can be combined to build high-performance simulation software while maintaining a clean separation between simulation, interoperability, and visualization.
+
+Although the current implementation focuses on rigid body dynamics, the architecture is intentionally modular and designed to support future extensions such as rotational dynamics, advanced collision detection algorithms, constraints, and spatial acceleration structures.
+
+---
+
+# License
 
 This project is licensed under the MIT License.
 

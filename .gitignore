@@ -1,0 +1,33 @@
+
+# Node.js
+node_modules/
+
+# Build directories
+build/
+cmake-build-debug/
+cmake-build-release/
+dist/
+
+# C++ build artifacts
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+
+# Emscripten cache/output
+*.wasm.map
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

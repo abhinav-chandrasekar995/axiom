@@ -74,29 +74,45 @@ The primary goals of Axiom are to:
 ## Architecture
 
 ```text
-                        Browser
+                             Browser
 
-                   Three.js Renderer
-                           │
-                    JavaScript Layer
-                           │
-                     Embind Bindings
-                           │
-                   WebAssembly Module
-                           │
-        ┌─────────────────────────────────┐
-        │             Axiom               │
-        │                                 │
-        │  Vector Mathematics             │
-        │  Physics World                  │
-        │  Particle System                │
-        │  Rigid Body System              │
-        │  Numerical Integration          │
-        │  Collision Detection            │
-        │  Collision Resolution           │
-        └─────────────────────────────────┘
-                           │
-                        Modern C++
+                    Three.js Rendering Layer
+                                │
+                                ▼
+                    JavaScript Interface (ES6)
+                                │
+                                ▼
+                  Embind JavaScript Bindings
+                                │
+                                ▼
+               WebAssembly Module (Compiled C++)
+                                │
+                                ▼
+┌──────────────────────────────────────────────────────────────┐
+│                          AXIOM ENGINE                        │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Mathematics                                                 │
+│  • Vector3                                                   │
+│                                                              │
+│  Physics                                                     │
+│  • Particle                                                  │
+│  • RigidBody                                                 │
+│  • PhysicsWorld                                              │
+│                                                              │
+│  Simulation                                                  │
+│  • Euler Integration                                         │
+│  • Gravity                                                   │
+│                                                              │
+│  Collision                                                   │
+│  • Sphere–Sphere Detection                                   │
+│  • Impulse Resolution                                        │
+│  • Position Correction                                       │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+                          Modern C++17
 ```
 
 ---
@@ -104,20 +120,37 @@ The primary goals of Axiom are to:
 ## Project Structure
 
 ```text
-Axiom/
+Axiom
 │
-├── engine/
-│   ├── include/
-│   ├── src/
-│   └── ...
+├── engine
+│   ├── include
+│   │   ├── Vector3.h
+│   │   ├── Particle.h
+│   │   ├── RigidBody.h
+│   │   ├── PhysicsWorld.h
+│   │   ├── Collision.h
+│   │   └── ...
+│   │
+│   ├── src
+│   │   ├── Vector3.cpp
+│   │   ├── Particle.cpp
+│   │   ├── RigidBody.cpp
+│   │   ├── PhysicsWorld.cpp
+│   │   ├── Collision.cpp
+│   │   └── ...
+│   │
+│   └── bindings
+│       └── bindings.cpp
 │
-├── web/
+├── web
 │   ├── index.html
 │   ├── main.js
-│   └── ...
+│   ├── scene.js
+│   └── style.css
 │
 ├── CMakeLists.txt
 ├── package.json
+├── package-lock.json
 ├── README.md
 └── LICENSE
 ```

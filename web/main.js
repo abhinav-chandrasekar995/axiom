@@ -31,7 +31,7 @@ import Stats from "stats.js"; //importing for fps stats to imitate an engine
     stats.dom.style.transform="scale(1.5)";
     stats.dom.style.transformOrigin="top left";
 
-    const controls = new OrbitControls(camera, renderer.domElement); //start listening to mouse for input and updates the cam about (0,8,0)
+    const controls = new OrbitControls(camera, renderer.domElement); //start listening to mouse for input and updates the cam about (0,0,0)
     controls.enableDamping = true;
     controls.dampingFactor = 0.05; //smoothness 
 
